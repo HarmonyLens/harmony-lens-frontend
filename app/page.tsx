@@ -7,6 +7,7 @@ import { formatPicture } from '../utils'
 import ConnectionButton from './connectionbutton';
 import Composer from './composer';
 import { useActiveProfile, usePublications } from '@lens-protocol/react-web';
+import MidiPlayer from './MidiPlayer';
 import { WhenLoggedInWithProfile } from './WhenLoggedInWithProfile';
 import { useAccount, useConnect, useDisconnect } from 'wagmi';
 import { InjectedConnector } from 'wagmi/connectors/injected';
@@ -51,7 +52,8 @@ export default function Home() {
     limit: 25
   })
 
-  console.log('data:', data)
+  const AUDIO_URL = 'https://bafybeiapnsiidoolozm7rmw2sjn6guf5tho4q4h64evrzjasxolwzd3d2m.ipfs.w3s.link/ipfs/bafybeiapnsiidoolozm7rmw2sjn6guf5tho4q4h64evrzjasxolwzd3d2m/audio.mid';
+
 
   return (
     <div className='p-20'>
@@ -88,6 +90,8 @@ export default function Home() {
 
         <h1 className='text-5xl'>Exploring</h1>
         <Publications />
+
+        <MidiPlayer src={AUDIO_URL} />
 
     </div>
   )
