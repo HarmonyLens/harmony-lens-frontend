@@ -54,7 +54,7 @@ const MidiPlayer: React.FC<MidiPlayerProps> = ({ src }) => {
     <div>
       <h3>Playing MIDI</h3>
       <button onClick={startPlayback}>{isPlaying ? 'Pause' : 'Start'}</button>
-      <button onClick={stopPlayback}>Stop</button>
+      <button onClick={stopPlayback}>Reset</button>
     </div>
   );
 };
