@@ -74,12 +74,12 @@ export const fetchPostDetails = async (post) => {
       return res.json();
     }
   );
-  const midi = await fetch(`${post.contentURI}/audio.mid`).then((res) => {
-    return res.arrayBuffer();
-  });
+  // const midi = await fetch(`${post.contentURI}/audio.mid`).then((res) => {
+  //   return res.arrayBuffer();
+  // });
 
   post.metadata = metadata;
-  post.midi = midi;
+  post.midi = `${post.contentURI}/audio.mid`;
 
   return post;
 };
@@ -87,4 +87,12 @@ export const fetchPostDetails = async (post) => {
 export const fetchPostById = async (id) => {
   const post = mockData.data.posts.find((post) => post.id === id);
   return await fetchPostDetails(post);
+};
+
+export const fetchPostsByProfileId = async (profileId) => {
+  const posts = mockData.data.posts.filter(
+    (post) => post.profileId.id === profileId
+  );
+
+  return await Promise.all(posts.map((post) => fetchPostDetails(post)));
 };

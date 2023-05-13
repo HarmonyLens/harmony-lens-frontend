@@ -1,17 +1,9 @@
 import { useState, useEffect } from "react";
-import reactLogo from "./assets/react.svg";
 import { Midi } from "@tonejs/midi";
 import * as Tone from "tone";
 import { fetchPosts, fetchPostDetails } from "./api";
 import { Link } from "react-router-dom";
-
-const User = ({ image }) => {
-  return (
-    <div>
-      <img src={image} />
-    </div>
-  );
-};
+import Navbar from "./components/Navbar.jsx";
 
 const PlayingMusic = ({ image, name, artist, length }) => {
   return (
@@ -99,7 +91,7 @@ function LatestSongs({ posts }) {
       <h1> Latest Songs </h1>
       <div className="flex flex-row justify-between space-x-20 items-center max-w-[100vw] overflow-auto px-10">
         {posts.map((post) => {
-          console.log(post);
+          // console.log(post);
           return (
             <div className="flex flex-col">
               <Link to={`/song/${post.id}`} className="cursor-pointer">
@@ -130,18 +122,18 @@ function App() {
   }, []);
 
   if (loading) {
-    return <h1>Loading...</h1>;
+    return (
+      <h1 className="mx-auto text-center mt-20 text-5xl text-white">
+        Loading...
+      </h1>
+    );
   }
 
   return (
     <div className="flex flex-col justify-between items-center">
-      <div className="relative flex justify-between h-[33vh] w-full bg-purple-500 p-4 mb-20">
-        <div className="text-white">
-          <h1>Welcome</h1>
-          <h1>Dave!</h1>
-        </div>
-        <User image={reactLogo} />
-        <div className="absolute -bottom-10 transform left-1/2 -translate-x-1/2">
+      <div className="relative flex justify-between h-[33vh] w-full bg-purple-500 p-4 mb-40">
+        <Navbar />
+        <div className="absolute -bottom-10 lg:-bottom-20 transform left-1/2 -translate-x-1/2">
           <img
             src={
               "https://e0.pxfuel.com/wallpapers/613/325/desktop-wallpaper-aesthetic-neon-music-note-neon-music-notes.jpg"
@@ -153,12 +145,12 @@ function App() {
           </h2>
         </div>
       </div>
-      <PlayingMusic
+      {/* <PlayingMusic
         image={reactLogo}
         name="Song Name"
         artist="Artist"
         length="3:00"
-      />
+      /> */}
       {/* <MidiPlayer
         src={
           "https://bafybeiapnsiidoolozm7rmw2sjn6guf5tho4q4h64evrzjasxolwzd3d2m.ipfs.w3s.link/ipfs/bafybeiapnsiidoolozm7rmw2sjn6guf5tho4q4h64evrzjasxolwzd3d2m/audio.mid"
