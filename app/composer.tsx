@@ -8,14 +8,13 @@ interface ComposerProps {
 
 export default function Composer({ publisher }: ComposerProps) {
   const [content, setContent] = useState('');
-//   const [name, setName] = useState('');
   const { execute: create, error, isPending } = useCreatePost({ publisher, upload: uploadJson });
 
   const onSubmit = async (content: string) => {
     await create({
       content,
       contentFocus: ContentFocus.TEXT,
-      locale: 'en',
+      locale: 'en'
     });
   };
 

@@ -42,7 +42,8 @@ import { fetchSigner } from 'wagmi/actions';
 import { never } from '../utils';
 
 
-const TOP_UP = '100000000000000000'; // 0.1 MATIC
+
+const TOP_UP = '50000000000000000'; // 0.1 MATIC
 const MIN_FUNDS = 0.05;
 
 async function getBundlr() {
@@ -61,11 +62,15 @@ async function getBundlr() {
 
   await bundlr.ready();
 
-  const balance = await bundlr.getBalance((await signer?.getAddress()) ?? never());
+//   const balance = await bundlr.getBalance((await signer?.getAddress()) ?? never());
 
-  if (bundlr.utils.unitConverter(balance).toNumber() < MIN_FUNDS) {
-    await bundlr.fund(TOP_UP);
-  }
+  await bundlr.fund(TOP_UP);
+
+//   console.log(bundlr.utils.toAtomic(balance))
+
+//   if (bundlr.utils.unitConverter(balance).toNumber() < MIN_FUNDS) {
+//     await bundlr.fund(TOP_UP);
+//   }
 
   return bundlr;
 }

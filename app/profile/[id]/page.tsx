@@ -112,7 +112,7 @@ function Publications({
 }) {
   let { data: publications } = usePublications({
     profileId: profile.id,
-    limit: 10,
+    limit: 5,
   })
   publications = publications?.map(publication => {
     if (publication.__typename === 'Mirror') {
@@ -126,7 +126,7 @@ return (
     <>
       {
         publications?.map((pub: any, index: number) => (
-          <div key={index} className="py-4 bg-zinc-900 rounded mb-3 px-4">
+          <div key={index} className="bg-white py-4 bg-zinc-900 rounded mb-3 px-4">
             <p>{pub.metadata.content}</p>
             {
               pub.metadata?.media[0]?.original && ['image/jpeg', 'image/png'].includes(pub.metadata?.media[0]?.original.mimeType) && (
