@@ -5,7 +5,9 @@ import { useExploreProfiles } from '@lens-protocol/react-web'
 import Link from 'next/link'
 import { formatPicture } from '../utils'
 import ConnectionButton from './connectionbutton';
-import { useActiveProfile } from '@lens-protocol/react-web';
+import Composer from './composer';
+import { useActiveProfile, ProfileOwnedByMe, ProfileId, useFeed, useRecentPosts  } from '@lens-protocol/react-web';
+import { WhenLoggedInWithProfile } from './WhenLoggedInWithProfile';
 import { useAccount, useConnect, useDisconnect } from 'wagmi';
 import { InjectedConnector } from 'wagmi/connectors/injected';
 
@@ -30,7 +32,7 @@ export default function Home() {
   const { data } = useExploreProfiles({
     limit: 25
   })
-  
+
   return (
     <div className='p-20'>
       <h1 className='text-5xl'>Exploring</h1>
@@ -56,6 +58,13 @@ export default function Home() {
         ))
       }
       <MyProfile />
+      <WhenLoggedInWithProfile>
+          {({ profile }) => (
+            <>
+              <Composer publisher={profile} />
+              </>
+          )}
+        </WhenLoggedInWithProfile>
     </div>
   )
 }

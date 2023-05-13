@@ -14,3 +14,7 @@ export function formatPicture(picture: any) {
       return picture
     }
   }
+
+  export function never(message = 'Unexpected call to never()'): never {
+    throw new Error(message);
+  }
