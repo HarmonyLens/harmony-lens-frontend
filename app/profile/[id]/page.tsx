@@ -80,8 +80,8 @@ export default function Profile() {
         }
         {
           profile.picture?.__typename === 'MediaSet' && (
-            <Image
-              width="200"
+            <img
+                width="200"
               height="200"
               alt={profile.handle}
               className='rounded-xl'
@@ -112,7 +112,7 @@ function Publications({
 }) {
   let { data: publications } = usePublications({
     profileId: profile.id,
-    limit: 10,
+    limit: 5,
   })
   publications = publications?.map(publication => {
     if (publication.__typename === 'Mirror') {
@@ -130,7 +130,7 @@ return (
             <p>{pub.metadata.content}</p>
             {
               pub.metadata?.media[0]?.original && ['image/jpeg', 'image/png'].includes(pub.metadata?.media[0]?.original.mimeType) && (
-                <Image
+                <img
                   width="400"
                   height="400"
                   alt={profile.handle}

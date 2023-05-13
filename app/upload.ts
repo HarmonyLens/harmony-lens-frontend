@@ -42,7 +42,7 @@ import { fetchSigner } from 'wagmi/actions';
 import { never } from '../utils';
 
 
-const TOP_UP = '100000000000000000'; // 0.1 MATIC
+const TOP_UP = '10000000000000000'; // 0.1 MATIC
 const MIN_FUNDS = 0.05;
 
 async function getBundlr() {

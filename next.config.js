@@ -11,6 +11,10 @@ const nextConfig = {
         'source.unsplash.com',
         'arweave.net',
         'images.lens.phaver.com',
+        'test.com',
+        'theshr.infura-ipfs.io',
+        'kaira.infura-ipfs.io',
+        'robohash.org',
         ""
       ],
     },
