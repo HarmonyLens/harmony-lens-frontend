@@ -9,6 +9,8 @@ interface MidiPlayerProps {
 const MidiPlayer: React.FC<MidiPlayerProps> = ({ src }) => {
   const [synth, setSynth] = useState<Tone.PolySynth | null>(null);
   const [midi, setMidi] = useState<Midi | null>(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [part, setPart] = useState<Tone.Part<any> | null>(null);
 
   useEffect(() => {
     const initMidi = async () => {
@@ -16,22 +18,28 @@ const MidiPlayer: React.FC<MidiPlayerProps> = ({ src }) => {
       const midiData = await response.arrayBuffer();
       const parsedMidi = new Midi(midiData);
       setMidi(parsedMidi);
+
+      await Tone.start();
+      const polySynth = new Tone.PolySynth().toDestination();
+      setSynth(polySynth);
+
+      const midiPart = new Tone.Part((time, note) => {
+        polySynth.triggerAttackRelease(note.name, note.duration, time, note.velocity);
+      }, parsedMidi.tracks[0].notes).start(0);
+      setPart(midiPart);
     };
 
     initMidi();
   }, [src]);
 
   const startPlayback = async () => {
-    if (!midi) return;
-
-    await Tone.start();
-    const polySynth = new Tone.PolySynth().toDestination();
-    setSynth(polySynth);
-
-    const now = Tone.now();
-    midi.tracks[0].notes.forEach((note) => {
-      polySynth.triggerAttackRelease(note.name, note.duration, note.time + now, note.velocity);
-    });
+    if (!isPlaying) {
+      setIsPlaying(true);
+      Tone.Transport.start();
+    } else {
+      setIsPlaying(false);
+      Tone.Transport.pause();
+    }
   };
 
   const stopPlayback = () => {
@@ -39,13 +47,13 @@ const MidiPlayer: React.FC<MidiPlayerProps> = ({ src }) => {
       synth.releaseAll();
     }
     Tone.Transport.stop();
-    Tone.Transport.cancel();
+    setIsPlaying(false);
   };
 
   return (
     <div>
       <h3>Playing MIDI</h3>
-      <button onClick={startPlayback}>Start</button>
+      <button onClick={startPlayback}>{isPlaying ? 'Pause' : 'Start'}</button>
       <button onClick={stopPlayback}>Stop</button>
     </div>
   );
