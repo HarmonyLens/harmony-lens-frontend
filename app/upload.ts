@@ -61,11 +61,15 @@ async function getBundlr() {
 
   await bundlr.ready();
 
-  const balance = await bundlr.getBalance((await signer?.getAddress()) ?? never());
+//   const balance = await bundlr.getBalance((await signer?.getAddress()) ?? never());
 
-  if (bundlr.utils.unitConverter(balance).toNumber() < MIN_FUNDS) {
-    await bundlr.fund(TOP_UP);
-  }
+  await bundlr.fund(TOP_UP);
+
+//   console.log(bundlr.utils.toAtomic(balance))
+
+//   if (bundlr.utils.unitConverter(balance).toNumber() < MIN_FUNDS) {
+//     await bundlr.fund(TOP_UP);
+//   }
 
   return bundlr;
 }
