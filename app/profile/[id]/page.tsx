@@ -80,8 +80,8 @@ export default function Profile() {
         }
         {
           profile.picture?.__typename === 'MediaSet' && (
-            <Image
-              width="200"
+            <img
+                width="200"
               height="200"
               alt={profile.handle}
               className='rounded-xl'
@@ -130,7 +130,7 @@ return (
             <p>{pub.metadata.content}</p>
             {
               pub.metadata?.media[0]?.original && ['image/jpeg', 'image/png'].includes(pub.metadata?.media[0]?.original.mimeType) && (
-                <Image
+                <img
                   width="400"
                   height="400"
                   alt={profile.handle}
