@@ -14,7 +14,7 @@ import Navbar from './components/Navbar.jsx'
 import Inspire from './pages/Inspire'
 import Songs from './pages/Songs.jsx'
 const { provider, webSocketProvider } = configureChains(
-    [polygon, polygonMumbai],
+    [polygon],
     [publicProvider()]
 )
 
@@ -25,8 +25,8 @@ const client = createClient({
 })
 
 const lensConfig = {
-    // appId: appId('harmony'),
-    // sources: [appId('harmony')],
+    // appId: appId('lenster'),
+    // sources: [appId('lenster')],
     bindings: wagmiBindings(),
     environment: production,
 }

@@ -1,6 +1,9 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { useExplorePublications } from '@lens-protocol/react-web'
+import {
+    useExplorePublications,
+    useActiveProfile,
+} from '@lens-protocol/react-web'
 import { Audio } from 'react-loader-spinner'
 
 function LatestSongs() {
@@ -12,8 +15,11 @@ function LatestSongs() {
     } = useExplorePublications({
         limit: 12,
         publicationTypes: ['POST'],
+        sortCriteria: 'LATEST',
+
         metadataFilter: {
             restrictPublicationMainFocusTo: ['AUDIO'],
+            // restrictPublicationLocaleTo: ['en'],
         },
     })
 
@@ -48,8 +54,10 @@ function LatestSongs() {
     return (
         <div className="flex flex-col justify-between items-center text-white space-y-2">
             <h1> Latest Songs </h1>
-            <div className="overflow-auto max-h-[50vh]">
-                <div className="grid grid-cols-2 justify-between gap-10 items-center max-w-[100vw] overflow-auto px-10 py-10 ">
+            <div>
+                {/* // className="overflow-auto max-h-[50vh]"> */}
+
+                <div className="grid grid-cols-1 justify-between gap-10 items-center max-w-[100vw]  px-10 py-10 ">
                     {publication.map((publication, index) => (
                         <div
                             key={index}
@@ -67,7 +75,7 @@ function LatestSongs() {
                                         ) ||
                                         ipfsUrl(publication?.metadata?.image)
                                     }
-                                    width={100}
+                                    width={300}
                                 />
                                 <div>
                                     {publication?.metadata?.content.substring(
@@ -103,13 +111,14 @@ function InspireStates() {
         sectionAmount: 0,
         noteAmount: 0,
     })
+    const { data: publisher, loading } = useActiveProfile()
 
     const [uri, setUri] = useState('')
 
     const inspireHandler = async () => {
         setVisible(true)
         const sentiment = await fetch(
-            'http://localhost:3000/emotionOfHandle?handle=alptoksoz.lens'
+            'http://localhost:3000/emotionOfHandle?handle=' + publisher.handle
         ).then((response) => response.json().then((data) => data))
 
         setSentiment({

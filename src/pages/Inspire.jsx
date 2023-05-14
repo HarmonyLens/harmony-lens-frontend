@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 // import LoginButton from "../components/LoginButton";
 // import LogoutButton from "../components/LogoutButton";
 // import {uploadJson} from "./upload";
@@ -9,19 +9,28 @@ import {
     useCreatePost,
 } from '@lens-protocol/react-web'
 
+import { uploadJson } from './upload'
+
 async function upload(content) {
-    const url = await fetch('http://localhost:3000/upload', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(content),
-    }).then((response) => response.json().then((data) => data))
-
-    console.log('http://harmonylens.infura-ipfs.io/ipfs/' + url.uri)
-
-    return 'http://harmonylens.infura-ipfs.io/ipfs/' + url.uri
+    const data = await uploadJson(content)
+    return data
 }
+
+// async function upload(content) {
+//     console.log('content', content)
+
+//     const url = await fetch('http://localhost:3000/upload', {
+//         method: 'POST',
+//         headers: {
+//             'Content-Type': 'application/json',
+//         },
+//         body: JSON.stringify(content),
+//     }).then((response) => response.json().then((data) => data))
+
+//     console.log('ipfs://' + url.uri)
+
+//     return 'ipfs://' + url.uri
+// }
 
 const Home = () => {
     const { data: publisher, loading } = useActiveProfile()
@@ -40,15 +49,42 @@ const Home = () => {
 }
 
 function Compose({ publisher }) {
-    const { execute: create } = useCreatePost({ publisher, upload })
+    const {
+        execute: create,
+        error,
+        isPending,
+    } = useCreatePost({ publisher, upload })
+
     const onSubmit = async () => {
+        console.log('onSubmit')
         await create({
+            content: 'ipfs://Qmehd6BMxWCCWF8w7gGJ17kDKnxryUanybdGzSgCFGCnfP',
             contentFocus: ContentFocus.AUDIO,
+            locale: 'en',
+            name: 'test',
+            description: 'test',
             media: [
                 {
-                    url: 'https://bafybeiga5doszfextckersvxnj5rcytx3y4uzktulft5glatydiky4k2l4.ipfs.w3s.link/audio-7.mp3',
+                    url: 'ipfs://Qmehd6BMxWCCWF8w7gGJ17kDKnxryUanybdGzSgCFGCnfP',
                     mimeType: AudioType.MP3,
-                    cover: 'https://cryptoslate.com/wp-content/uploads/2022/08/lens-protocol-cover.jpg',
+                    cover: 'ipfs://QmdTXL4siQ4MXb5QgFr4dV27skPaeDKRkrh2Xd4MZvitoZ',
+                },
+            ],
+            attributes: [
+                {
+                    displayType: 'DATE',
+                    value: new Date(), // actual Data instance
+                    traitType: 'DoB',
+                },
+                {
+                    displayType: 'NUMBER',
+                    value: 42, // an actual JS number
+                    traitType: 'Level',
+                },
+                {
+                    displayType: 'STRING',
+                    value: '#ababab', // an arbitrary JS string
+                    traitType: 'Color',
                 },
             ],
         })
