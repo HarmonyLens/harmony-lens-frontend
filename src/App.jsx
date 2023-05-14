@@ -4,104 +4,54 @@ import * as Tone from "tone";
 import { fetchPosts, fetchPostDetails } from "./api";
 import { Link } from "react-router-dom";
 import Navbar from "./components/Navbar.jsx";
-
-const PlayingMusic = ({ image, name, artist, length }) => {
-  return (
-    <div className="flex flex-row bg-gray-600">
-      <img src={image} />
-      <h1>{name}</h1>
-      <h2>{artist}</h2>
-      <h3>{length}</h3>
-    </div>
-  );
-};
-
-const MidiPlayer = ({ src }) => {
-  const [synth, setSynth] = useState(null);
-  const [midi, setMidi] = useState(null);
-
-  useEffect(() => {
-    const initMidi = async () => {
-      const response = await fetch(src);
-      const midiData = await response.arrayBuffer();
-      const parsedMidi = new Midi(midiData);
-      setMidi(parsedMidi);
-    };
-
-    initMidi();
-  }, [src]);
-
-  const startPlayback = async () => {
-    if (!midi) return;
-
-    await Tone.start();
-    const polySynth = new Tone.PolySynth().toDestination();
-    setSynth(polySynth);
-
-    const now = Tone.now();
-    midi.tracks[0].notes.forEach((note) => {
-      polySynth.triggerAttackRelease(
-        note.name,
-        note.duration,
-        note.time + now,
-        note.velocity
-      );
-    });
-  };
-
-  const stopPlayback = () => {
-    if (synth) {
-      synth.releaseAll();
-    }
-    Tone.Transport.stop();
-    Tone.Transport.cancel();
-  };
-
-  return (
-    <div>
-      <h3>Playing MIDI</h3>
-      <button onClick={startPlayback}>Start</button>
-      <button onClick={stopPlayback}>Stop</button>
-    </div>
-  );
-};
-
-function CreateMusic() {
-  return (
-    <div className="flex flex-col justify-between items-center text-white space-y-2">
-      <h1> Create Music </h1>
-      <div className="flex flex-col justify-between items-center">
-        <div className="flex flex-col justify-between items-center">
-          <h2> Name it </h2>
-          <input type="text" />
-        </div>
-        <div className="flex flex-col justify-between items-center">
-          <h2> Add Description </h2>
-          <input type="text" />
-        </div>
-      </div>
-      <button className="bg-purple-500 p-4 rounded-lg"> Create </button>
-    </div>
-  );
-}
+import {
+  useExplorePublications,
+  PublicationMainFocus,
+} from "@lens-protocol/react-web";
+import { Audio } from "react-loader-spinner";
 
 function LatestSongs({ posts }) {
+  const {
+    data: publication,
+    loading,
+    hasMore,
+    next,
+  } = useExplorePublications({
+    limit: 5,
+    metadataFilter: {
+      restrictPublicationMainFocusTo: ["AUDIO"],
+    },
+  });
+
+  if (loading) {
+    return (
+      <Audio
+        height="80"
+        width="80"
+        radius="9"
+        color="purple"
+        ariaLabel="three-dots-loading"
+        wrapperStyle
+        wrapperClass
+      />
+    );
+  }
+
   return (
     <div className="flex flex-col justify-between items-center text-white space-y-2">
       <h1> Latest Songs </h1>
       <div className="flex flex-row justify-between space-x-20 items-center max-w-[100vw] overflow-auto px-10">
-        {posts.map((post) => {
-          // console.log(post);
-          return (
-            <div className="flex flex-col">
-              <Link to={`/song/${post.id}`} className="cursor-pointer">
-                <img src={post.metadata?.image} className="w-full" />
-              </Link>
-              <h2 className="text-center"> {post.profileId.handle} </h2>
-              {/* <h3> {post.description} </h3> */}
-            </div>
-          );
-        })}
+        {publication.map((publication) => (
+          <div key={publication.id}>
+            <Link to={`/song/${publication.id}`} className="cursor-pointer">
+              <img
+                src={publication?.metadata?.media[0]?.original?.cover}
+                width={100}
+              />
+            </Link>
+            <div>{publication?.metadata?.content}</div>
+          </div>
+        ))}
       </div>
     </div>
   );
@@ -123,9 +73,17 @@ function App() {
 
   if (loading) {
     return (
-      <h1 className="mx-auto text-center mt-20 text-5xl text-white">
-        Loading...
-      </h1>
+      <div className="flex flex-col justify-center items-center h-screen">
+        <Audio
+          height="80"
+          width="80"
+          radius="9"
+          color="purple"
+          ariaLabel="three-dots-loading"
+          wrapperStyle
+          wrapperClass
+        />
+      </div>
     );
   }
 

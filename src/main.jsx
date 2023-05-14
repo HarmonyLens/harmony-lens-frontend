@@ -7,8 +7,10 @@ import "./output.css";
 import { configureChains, createClient, WagmiConfig } from "wagmi";
 import { mainnet, polygon, polygonMumbai } from "wagmi/chains";
 import { publicProvider } from "wagmi/providers/public";
-import { LensProvider, development } from "@lens-protocol/react-web";
+import { appId, LensProvider, development } from "@lens-protocol/react-web";
 import { bindings as wagmiBindings } from "@lens-protocol/wagmi";
+import Inspire from "./pages/Inspire";
+import Songs from "./pages/Songs.jsx";
 const { provider, webSocketProvider } = configureChains(
   [polygon, mainnet, polygonMumbai],
   [publicProvider()]
@@ -21,6 +23,8 @@ const client = createClient({
 });
 
 const lensConfig = {
+  // appId: appId("harmony"),
+  // sources: [appId("harmony")],
   bindings: wagmiBindings(),
   environment: development,
 };
@@ -33,6 +37,9 @@ ReactDOM.createRoot(document.getElementById("root")).render(
           {/* <Route path="/" element={<Layout />}> */}
           <Route index element={<App />} />
           <Route path="/song/:id" element={<Song />} />
+          <Route path="/inspire" element={<Inspire />} />
+          <Route path="/songs" element={<Songs />} />
+
           {/* <Route path="*" element={<NoPage />} /> */}
           {/* </Route> */}
         </Routes>
