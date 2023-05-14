@@ -9,7 +9,7 @@ import { appId, LensProvider, production } from '@lens-protocol/react-web'
 import { bindings as wagmiBindings } from '@lens-protocol/wagmi'
 
 import App from './App.jsx'
-import Song from './pages/Song.jsx'
+import Song, { SepecificSong } from './pages/Song.jsx'
 import Navbar from './components/Navbar.jsx'
 import Inspire from './pages/Inspire'
 import Songs from './pages/Songs.jsx'
@@ -39,6 +39,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
                 <Routes>
                     <Route index element={<App />} />
                     <Route path="/song/:id" element={<Song />} />
+                    <Route path="/song_/:id" element={<SepecificSong />} />
                     <Route path="/inspire" element={<Inspire />} />
                     <Route path="/songs" element={<Songs />} />
                 </Routes>

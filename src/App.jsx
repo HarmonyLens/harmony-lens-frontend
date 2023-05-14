@@ -51,6 +51,12 @@ function LatestSongs() {
         }
     }
 
+    const mock = {
+        name: "HermonyLens - 'The First Song",
+        image: 'ipfs://QmdTXL4siQ4MXb5QgFr4dV27skPaeDKRkrh2Xd4MZvitoZ',
+        song: 'ipfs://Qmehd6BMxWCCWF8w7gGJ17kDKnxryUanybdGzSgCFGCnfP',
+    }
+
     return (
         <div className="flex flex-col justify-between items-center text-white space-y-2">
             <h1> Latest Songs </h1>
@@ -58,6 +64,15 @@ function LatestSongs() {
                 {/* // className="overflow-auto max-h-[50vh]"> */}
 
                 <div className="grid grid-cols-1 justify-between gap-10 items-center max-w-[100vw]  px-10 py-10 ">
+                    <div className="flex justify-center items-center">
+                        <Link
+                            to={`/song_/0x003e80-0xae`}
+                            className="cursor-pointer flex flex-col items-center text-center"
+                        >
+                            <img src={ipfsUrl(mock.image)} width={300} />
+                            <div>{mock.name}</div>
+                        </Link>
+                    </div>
                     {publication.map((publication, index) => (
                         <div
                             key={index}

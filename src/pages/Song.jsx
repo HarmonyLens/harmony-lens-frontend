@@ -28,6 +28,49 @@ const ipfsUrl = (url) => {
     }
 }
 
+export function SepecificSong() {
+    const id = useParams().id
+
+    const mock = {
+        name: "HermonyLens - 'The First Song",
+        image: 'ipfs://QmdTXL4siQ4MXb5QgFr4dV27skPaeDKRkrh2Xd4MZvitoZ',
+        song: 'ipfs://Qmehd6BMxWCCWF8w7gGJ17kDKnxryUanybdGzSgCFGCnfP',
+    }
+
+    return (
+        <div className="flex flex-col justify-center items-center">
+            <h1>Song {id}</h1>
+            <img
+                src={ipfsUrl(mock?.image)}
+                className="absolute top-0 max-w-[80vw] max-h-[50vh] object-fit z-20 rounded-b-full"
+            />
+            <img
+                src={ipfsUrl(mock?.image)}
+                className="absolute top-0 h-screen w-full blur-lg object-fit"
+            />
+            <div className="absolute bottom-10 text-white">
+                <Media>
+                    <div className="media">
+                        <div className="media-player">
+                            <Player src={ipfsUrl(mock?.song)} />
+                        </div>
+                        <div className="space-x-10">
+                            <PlayPause />
+                            <Volume />
+                            <span>
+                                <CurrentTime /> / <Duration />
+                            </span>
+                        </div>
+                    </div>
+                </Media>
+            </div>
+
+            {/* <img src={song?.metadata?.image} /> */}
+            {/* <MidiPlayer src={song?.metadata.midi} /> */}
+        </div>
+    )
+}
+
 export default function Song() {
     const id = useParams().id
 
