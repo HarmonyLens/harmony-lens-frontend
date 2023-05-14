@@ -40,7 +40,7 @@ function LatestSongs({ posts }) {
   return (
     <div className="flex flex-col justify-between items-center text-white space-y-2">
       <h1> Latest Songs </h1>
-      <div className="flex flex-row justify-between space-x-20 items-center max-w-[100vw] overflow-auto px-10">
+      <div className="flex flex-row justify-between space-x-20 items-center max-w-[100vw] overflow-auto px-10 py-10">
         {publication.map((publication) => (
           <div key={publication.id}>
             <Link to={`/song/${publication.id}`} className="cursor-pointer">
@@ -89,9 +89,9 @@ function App() {
 
   return (
     <div className="flex flex-col justify-between items-center">
-      <div className="relative flex justify-between h-[33vh] w-full bg-purple-500 p-4 mb-40">
+      <div className="relative flex justify-between h-[33vh] w-full bg-main p-4 mb-10">
         <Navbar />
-        <div className="absolute -bottom-10 lg:-bottom-20 transform left-1/2 -translate-x-1/2">
+        {/* <div className="absolute -bottom-10 lg:-bottom-20 transform left-1/2 -translate-x-1/2">
           <img
             src={
               "https://e0.pxfuel.com/wallpapers/613/325/desktop-wallpaper-aesthetic-neon-music-note-neon-music-notes.jpg"
@@ -101,7 +101,7 @@ function App() {
           <h2 className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-white text-2xl">
             Music
           </h2>
-        </div>
+        </div> */}
       </div>
       {/* <PlayingMusic
         image={reactLogo}

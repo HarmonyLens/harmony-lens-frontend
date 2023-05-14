@@ -16,6 +16,7 @@ export default function Navbar() {
         <h1>Welcome</h1>
         <h1>Dave!</h1>
       </div>
+      {/* <span id="lens-follow-small" data-handle="yourhandle" /> */}
       <ConnectionButton />
       <User image={reactLogo} />
     </div>
