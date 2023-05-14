@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { fetchPostById } from "../api";
-import MidiPlayer from "../components/MidiPlayer";
 import { usePublication } from "@lens-protocol/react-web";
 import { Media, Player, controls, withMediaProps } from "react-media-player";
 import { Audio } from "react-loader-spinner";
+// import PlayPause from "../components/PlayPause";
 
 const {
   PlayPause,

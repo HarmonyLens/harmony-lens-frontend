@@ -60,10 +60,6 @@ export default function ConnectionButton() {
   //   return <p>Loading...</p>;
   // }
 
-  if (wallet) {
-    return <p>You are logged-in with {wallet.address}</p>;
-  }
-
   return (
     <div className="connection-container">
       {wallet ? <LogoutButton /> : <LoginButton />}

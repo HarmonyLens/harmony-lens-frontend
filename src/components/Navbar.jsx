@@ -1,5 +1,6 @@
 import ConnectionButton from "./LoginButton";
 import reactLogo from "../assets/react.svg";
+import { useActiveProfile } from "@lens-protocol/react-web";
 
 const User = ({ image }) => {
   return (
@@ -9,13 +10,26 @@ const User = ({ image }) => {
   );
 };
 
+const Profile = () => {
+  const { data, error, loading } = useActiveProfile();
+
+  if (loading) return <p>Loading...</p>;
+
+  if (error) return <p>Error: {error.message}</p>;
+
+  if (data === null) return <p>No active profile</p>;
+
+  return (
+    <div>
+      <p>Active profile: {data.handle}</p>
+    </div>
+  );
+};
+
 export default function Navbar() {
   return (
     <div className="flex flex-row text-white justify-between w-full">
-      <div className="text-white">
-        <h1>Welcome</h1>
-        <h1>Dave!</h1>
-      </div>
+      <Profile />
       {/* <span id="lens-follow-small" data-handle="yourhandle" /> */}
       <ConnectionButton />
       <User image={reactLogo} />

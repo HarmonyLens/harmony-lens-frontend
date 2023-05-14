@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import Navbar from "./components/Navbar.jsx";
 import {
   useExplorePublications,
+  useActiveProfile,
   PublicationMainFocus,
 } from "@lens-protocol/react-web";
 import { Audio } from "react-loader-spinner";
@@ -17,10 +18,32 @@ function LatestSongs({ posts }) {
     hasMore,
     next,
   } = useExplorePublications({
-    limit: 5,
+    limit: 12,
+    publicationTypes: ["POST"],
     metadataFilter: {
       restrictPublicationMainFocusTo: ["AUDIO"],
     },
+  });
+
+  const [lastUpdatedAt, setLastUpdatedAt] = useState(Date.now());
+
+  useEffect(() => {
+    window.addEventListener("scroll", function () {
+      if (
+        window.innerHeight + window.scrollY >= document.body.offsetHeight &&
+        lastUpdatedAt < Date.now()
+      ) {
+        if (hasMore) {
+          console.log("fetching more");
+          next();
+          setLastUpdatedAt(Date.now() + 3000);
+        }
+      }
+    });
+
+    return () => {
+      window.removeEventListener("scroll", () => {});
+    };
   });
 
   if (loading) {
@@ -40,18 +63,32 @@ function LatestSongs({ posts }) {
   return (
     <div className="flex flex-col justify-between items-center text-white space-y-2">
       <h1> Latest Songs </h1>
-      <div className="flex flex-row justify-between space-x-20 items-center max-w-[100vw] overflow-auto px-10 py-10">
-        {publication.map((publication) => (
-          <div key={publication.id}>
-            <Link to={`/song/${publication.id}`} className="cursor-pointer">
-              <img
-                src={publication?.metadata?.media[0]?.original?.cover}
-                width={100}
-              />
-            </Link>
-            <div>{publication?.metadata?.content}</div>
-          </div>
-        ))}
+      <div className="overflow-auto max-h-[50vh]">
+        <div className="grid grid-cols-2 justify-between gap-10 items-center max-w-[100vw] overflow-auto px-10 py-10 ">
+          {publication.map((publication, index) => (
+            <div key={index} className="flex justify-center items-center">
+              <Link
+                to={`/song/${publication.id}`}
+                className="cursor-pointer flex flex-col items-center text-center"
+              >
+                <img
+                  src={publication?.metadata?.media[0]?.original?.cover}
+                  width={100}
+                />
+                <div>{publication?.metadata?.content}</div>
+              </Link>
+            </div>
+          ))}
+        </div>
+        <button
+          onClick={() => {
+            next();
+            setLastUpdatedAt(Date.now() + 3000);
+          }}
+          className="flex text-right justify-end items-end mr-20 ml-auto"
+        >
+          Load More
+        </button>
       </div>
     </div>
   );
@@ -60,6 +97,7 @@ function LatestSongs({ posts }) {
 function App() {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
+
   useEffect(() => {
     fetchPosts().then(async (posts) => {
       const postDetails = posts.data.posts.map((post, index) =>
@@ -87,10 +125,49 @@ function App() {
     );
   }
 
+  const inspireHandler = async () => {
+    const sentiment = await fetch(
+      "http://localhost:3000/emotionOfHandle?handle=alptoksoz.lens"
+    ).then((response) => response.json().then((data) => data));
+
+    console.log(
+      `Your last 5 tweets' sentiment is ${sentiment.DocSentimentResultString} with ${sentiment.DocSentimentValue} value`
+    );
+
+    const notes = await fetch(
+      `http://localhost:3000/notes?mood="${sentiment.DocSentimentResultString}"`
+    ).then((response) => response.json().then((data) => data));
+
+    console.log(
+      `Notes are created. There are ${
+        notes.sections.length
+      } sections and ${notes.sections
+        .map((section) => section.notes.length)
+        .reduce((a, b) => a + b, 0)} notes in total.`
+    );
+
+    const uri = await fetch("http://localhost:3000/create", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(notes),
+    }).then((response) => response.json().then((data) => data.uri));
+
+    console.log(
+      `Your song is created. You can listen it from http://harmonylens.infura-ipfs.io/ipfs/${uri}.`
+    );
+  };
+
   return (
     <div className="flex flex-col justify-between items-center">
       <div className="relative flex justify-between h-[33vh] w-full bg-main p-4 mb-10">
-        <Navbar />
+        <button
+          onClick={inspireHandler}
+          className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-white text-2xl border border-2 px-4 py-2 rounded-xl hover:scale-125 duration-300"
+        >
+          Inspire Me
+        </button>
         {/* <div className="absolute -bottom-10 lg:-bottom-20 transform left-1/2 -translate-x-1/2">
           <img
             src={
