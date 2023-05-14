@@ -28,11 +28,12 @@ const Profile = () => {
 
 export default function Navbar() {
   return (
-    <div className="flex flex-row text-white justify-between w-full">
+    <div className="flex flex-row text-white justify-between w-full py-2 items-center">
       <Profile />
-      {/* <span id="lens-follow-small" data-handle="yourhandle" /> */}
-      <ConnectionButton />
-      <User image={reactLogo} />
+      <div className="flex flex-row space-x-4">
+        <ConnectionButton />
+        <User image={reactLogo} />
+      </div>
     </div>
   );
 }
